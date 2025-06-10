@@ -1,0 +1,55 @@
+<div class="accessories-container">
+  <div class="header">
+    <h2>Car Accessories</h2>
+    <button class="add-button" routerLink="/add">Add New Accessory</button>
+  </div>
+
+  <div class="controls">
+    <div class="search-box">
+      <input 
+        type="text" 
+        placeholder="Search accessories..." 
+        [value]="searchTerm"
+        (input)="onSearch($event)"
+        class="search-input">
+    </div>
+    <div class="sort-controls">
+      <button 
+        class="sort-button" 
+        [class.active]="sortField === 'name'"
+        (click)="toggleSort('name')">
+        Name {{ getSortIcon('name') }}
+      </button>
+      <button 
+        class="sort-button" 
+        [class.active]="sortField === 'price'"
+        (click)="toggleSort('price')">
+        Price {{ getSortIcon('price') }}
+      </button>
+    </div>
+  </div>
+
+  <div class="accessories-grid">      <div class="accessory-card" *ngFor="let acc of filteredAccessories">
+        <a [routerLink]="['/accessories', acc.id]" class="card-link">
+          <div class="image-container">
+            <img [src]="acc.image" 
+                 [alt]="acc.name"
+                 (error)="handleImageError($event)">
+          </div>          <div class="accessory-details">
+            <h3>{{ acc.name }}</h3>
+            <p class="price">₹{{ acc.price }}</p>
+            <p class="description-preview">{{ (acc.description || '').slice(0,100) }}{{ (acc.description || '').length > 100 ? '...' : '' }}</p>
+          </div>
+        </a>
+        <div class="card-actions">
+          <button class="add-to-cart-button" (click)="addToCart($event, acc)">Add to Cart</button>
+          <button class="delete-button" (click)="deleteAccessory(acc)">Delete</button>
+        </div>
+      </div>
+  </div>
+
+  <div class="no-results" *ngIf="filteredAccessories.length === 0">
+    <p>No accessories found matching your search.</p>
+  </div>
+</div>
+
